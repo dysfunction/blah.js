@@ -23,4 +23,4 @@ These functions accept a regions result from `detect()` as a parameter
 
 Example
 -----
-Open `index.html` in your browser to see a graphical example. Some browsers are not cross-origin friendly to local files, but you can view the example here in that case: https://github.com/dysfunction/blah.js/
+Open `index.html` in your browser to see a graphical example. Some browsers are not cross-origin friendly to local files, but you can view the example here in that case: http://dysfunction.github.io/blah.js/
