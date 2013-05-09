@@ -24,6 +24,7 @@ require(['blobdetect'], function (blobdetect) {
 	}
 
 	function init() {
+		var time = Date.now();
 		var cells = getAlphaBitmap(image);
 		var ctx = createCanvas(400, 400);
 		var x, y;
@@ -48,6 +49,8 @@ require(['blobdetect'], function (blobdetect) {
 		for (x = 0; x < rects.length; x += 1) {
 			ctx.strokeRect(rects[x].x * cellSize, rects[x].y * cellSize, rects[x].width * cellSize, rects[x].height * cellSize);
 		}
+
+		console.log('Time: ' + (Date.now() - time) + 'ms');
 
 		document.body.appendChild(ctx.canvas);
 	}
