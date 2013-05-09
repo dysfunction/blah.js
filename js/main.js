@@ -38,9 +38,15 @@ require(['blobdetect'], function (blobdetect) {
 					ctx.fillStyle = '#000';
 					ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
 					ctx.fillStyle = '#f00';
-					ctx.fillText(regions[y * image.width + x], x * cellSize, y * cellSize);
+					ctx.fillText(regions[y * image.width + x], x * cellSize + cellSize * 0.25, y * cellSize + cellSize * 0.5);
 				}
 			}
+		}
+
+		var rects = blobdetect.getRegionRects(regions);
+		ctx.strokeStyle = '#00f';
+		for (x = 0; x < rects.length; x += 1) {
+			ctx.strokeRect(rects[x].x * cellSize, rects[x].y * cellSize, rects[x].width * cellSize, rects[x].height * cellSize);
 		}
 
 		document.body.appendChild(ctx.canvas);

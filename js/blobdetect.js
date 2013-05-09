@@ -19,6 +19,43 @@ define(function () {
 		return Object.keys(uniq).length;
 	}
 
+	function getRegionRects(regions) {
+		var rects = {}, x, y, region, rect, w = regions.width, h = regions.height;
+		for (y = 0; y < h; y += 1) {
+			for (x = 0; x < w; x += 1) {
+				region = regions[y * h + x];
+				if (region === 0) {
+					continue;
+				}
+				rect = rects[region] || {};
+				rect.id = region;
+				if (isNaN(rect.x) || x < rect.x) {
+					rect.x = x;
+				}
+
+				if (isNaN(rect.right) || x > rect.right) {
+					rect.right = x;
+				}
+
+				if (isNaN(rect.y) || y < rect.y) {
+					rect.y = y;
+				}
+
+				if (isNaN(rect.bottom) || y > rect.bottom) {
+					rect.bottom = y;
+				}
+
+				rect.width = rect.right - rect.x + 1;
+				rect.height = rect.bottom - rect.y + 1;
+				rects[region] = rect;
+			}
+		}
+
+		return Object.keys(rects).map(function (key) {
+			return rects[key];
+		});
+	}
+
 	function detect(data, width, height) {
 		var regions = createArray(data.length, 0);
 		var region = 1;
@@ -81,11 +118,14 @@ define(function () {
 			});
 		});
 
+		regions.width = width;
+		regions.height = height;
 		return regions;
 	}
 
 	return {
 		countRegions: countRegions,
-		detect: detect
+		detect: detect,
+		getRegionRects: getRegionRects
 	}
 });
