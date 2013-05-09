@@ -62,8 +62,8 @@ define(function () {
 		var regionMap = {};
 		var j, pass, row, col, value, neighbors, r1, r2, num;
 
-		for (row = 1; row < height; row += 1) {
-			for (col = 1; col < width - 1; col += 1) {
+		for (row = 0; row < height; row += 1) {
+			for (col = 0; col < width; col += 1) {
 				j = row * width + col;
 				value = data[j];
 				if (value === 0) {
@@ -72,15 +72,15 @@ define(function () {
 				}
 
 				neighbors = [
-					(row - 1) * width + col - 1, // northwest
-					(row - 1) * width + col, // north
-					(row - 1) * width + col + 1, // northeast
-					row * width + col - 1 // west
+					{ x: col - 1, y: row - 1, index: (row - 1) * width + col - 1 }, // northwest
+					{ x: col, y: row - 1, index: (row - 1) * width + col }, // north
+					{ x: col + 1, y: row - 1, index: (row - 1) * width + col + 1 }, // northeast
+					{ x: col - 1, y: row, index: row * width + col - 1 } // west
 				];
 
 				num = 0;
 				neighbors.forEach(function (neighbor) {
-					num += regions[neighbor];
+					num += regions[neighbor.index];
 				});
 
 				if (num === 0) {
@@ -88,18 +88,24 @@ define(function () {
 					region += 1;
 				} else {
 					num = Math.min.apply(window, neighbors.filter(function (neighbor) {
-						return regions[neighbor] !== 0;
+						return (
+							neighbor.x >= 0 &&
+							neighbor.x < width &&
+							neighbor.y >= 0 &&
+							neighbor.y < height &&
+							regions[neighbor.index] !== 0
+						);
 					}).map(function (neighbor) {
-						return regions[neighbor];
+						return regions[neighbor.index];
 					}));
 
 					regions[j] = num;
 					neighbors.forEach(function (neighbor) {
-						if (data[neighbor] === value) {
-							if (regions[neighbor] !== num) {
-								regionMap[regions[neighbor]] = num;
+						if (data[neighbor.index] === value) {
+							if (regions[neighbor.index] !== num) {
+								regionMap[regions[neighbor.index]] = num;
 							}
-							regions[neighbor] = num;
+							regions[neighbor.index] = num;
 						}
 					});
 				}
